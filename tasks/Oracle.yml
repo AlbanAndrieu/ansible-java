@@ -133,7 +133,7 @@
     dest={{ java_install_dir }}/oracle/
     copy=false
     creates={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}
-#  when: ansible_distribution != 'CentOS' and ansible_distribution != 'Red Hat Enterprise Linux' and ansible_distribution != 'CentOS' and ansible_distribution != 'Red Hat Enterprise Linux'
+#  when: ansible_distribution != 'Debian' and ansible_distribution != 'Ubuntu' and ansible_distribution != 'CentOS' and ansible_distribution != 'Red Hat Enterprise Linux'
 
 - name: Remove Java archive
   file: path={{ ansible_data_path }}/{{ java_oracle_redis_filename }} state=absent
