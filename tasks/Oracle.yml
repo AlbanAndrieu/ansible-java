@@ -111,6 +111,21 @@
     group=0
     mode=0644
 
+##unarchive below does not work for tar.gz
+#- name: Install Oracle Java Debian package 
+#  action: command creates={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }} chdir={{ java_install_dir }}/oracle tar zxvf {{ ansible_data_path }}/{{ java_oracle_redis_filename }} --owner=root
+#  register: java_installed
+##  ignore_errors: True 
+#  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+# 
+#- name: Install Oracle Java RPM package
+#  action: command creates={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }} chdir={{ java_install_dir }}/oracle rpm --force -Uvh {{ ansible_data_path }}/{{ java_oracle_redis_filename }}
+#  register: java_installed
+##  ignore_errors: True
+#  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+#
+#- debug: msg="java_installed value is {{ java_installed }} {{ java_installed.skipped }} {{ java_installed.changed }}"
+
 - name: Install Oracle Java
   tags: java
   unarchive:
@@ -118,8 +133,16 @@
     dest={{ java_install_dir }}/oracle/
     copy=false
     creates={{ java_install_dir }}/oracle/{{ java_oracle_version_str_pkg }}
+#  when: ansible_distribution != 'CentOS' and ansible_distribution != 'Red Hat Enterprise Linux' and ansible_distribution != 'CentOS' and ansible_distribution != 'Red Hat Enterprise Linux'
 
-
+- name: Remove Java archive
+  file: path={{ ansible_data_path }}/{{ java_oracle_redis_filename }} state=absent
+  when: java_download_when  
+  
+- name: Remove sha256sum file
+  file: path={{ ansible_data_path }}/java.sha256sum state=absent
+  when: java_download_when  
+  
 # Archives may be packaged with some useless uid and gid
 - name: Fixup filesystem permissions
   file:
