@@ -152,7 +152,6 @@
     recurse=true
     dest={{ java_install_dir }}
 
-
 # Setup a custom fact to allow roles depending on Java to configure
 #   JAVA_HOME variable
 - name: Set JAVA_HOME ansible fact
